@@ -95,5 +95,20 @@ customer1.accounts[2].withdraw(2000, "Sushi restaurant 1")
 customer1.accounts[2].withdraw(3000, "Sushi restaurant 2")
 
 
+customer2 = Customer("Oskars", "Liepa", "946156-67152", "oskarsl@someemail.com")
+customer2.add_account("751246985", "EUR", 0)
+customer2.add_account("679458245", "USD", 0)
+
+customer2.accounts[0].deposit(600, "Alga par 03/2023")
+
+def transfer_money(account_from, account_to, amount):
+    account_from.withdraw(amount, f"Transfer to {account_to.number}")
+    account_to.deposit(amount, f"Transfer from {account_from.number}")
+
+transfer_money(customer2.accounts[0], customer1.accounts[0], 200)
+
 for account in customer1.accounts:
+    account.print_transactions()
+
+for account in customer2.accounts:
     account.print_transactions()
