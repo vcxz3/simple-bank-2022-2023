@@ -28,6 +28,13 @@ class Customer:
         else:
             print(f"Konts ar numuru {number} nav atrasts.")
 
+    def print_transactions(self):
+        print()
+        print("-" * 100)
+        print(f"😀 Transaction report for customer {self.name} {self.surname}")     
+        for account in self.accounts:
+            account.print_transactions()
+
 # KOMANDAS UZDEVUMS 2
 # Izveido Account klases 2 metodes:
 # deposit (ielikt naudu kontā)
@@ -59,8 +66,12 @@ class Account:
         self.balance -= amount
 
     def print_transactions(self):
-        for transaction in self.transactions:
-            transaction.status()
+        print(f"🧾 Account {self.number} {self.currency}")
+        if len(self.transactions) == 0:
+            print("\t💸 <no transactions for this account>")
+        else:
+            for transaction in self.transactions:
+                transaction.status()
 
     
 
@@ -78,8 +89,11 @@ class Transaction:
         self.datetime_created = datetime.datetime.now()
     
     def status(self):
-        print(f"Transaction: {self.amount} {self.datetime_created} {self.notes}")
-        
+        print(f"\t💸 {self.amount} {self.datetime_created} {self.notes}")
+
+
+
+
 
 customer1 = Customer("Anna", "Bērziņa", "78987-65448", "annab@someemail.co")
 customer1.add_account("123456789", "EUR", 200)
@@ -93,5 +107,17 @@ customer1.accounts[0].withdraw(120, "Keyboardz from online shop")
 
 customer1.accounts[1].deposit(200, "Freelance compensation 03/2023")
 
-for account in customer1.accounts:
-    account.print_transactions()
+
+customer2 = Customer("Oskars", "Liepa", "654987-123456", "oskarsl@someemail.co")
+customer2.add_account("741254569", "EUR", 0)
+
+customer2.accounts[0].deposit(600, "Alga par 03/2023")
+
+def transfer_money(account_from, account_to, amount):
+    account_from.withdraw(amount, f"Transfer to {account_to.number}")
+    account_to.deposit(amount, f"Transfer from {account_from.number}")    
+
+transfer_money(customer2.accounts[0], customer1.accounts[0], 199)
+
+customer1.print_transactions()
+customer2.print_transactions()
