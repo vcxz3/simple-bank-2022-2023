@@ -27,6 +27,13 @@ class Customer:
         else:
             print(f"Account with number {account_number} not found.")
 
+    def print_transactions(self):
+        print()
+        print(f"Customer {self.name} {self.surname} ({self.id})")
+        print("-" * 100)
+        for account in self.accounts:
+            account.print_transactions()
+
 
 # KOMANDAS UZDEVUMS 2
 # Izveido Account klases 2 metodes:
@@ -45,7 +52,7 @@ class Account:
         self.transactions = []
 
     def status(self):
-        print(f"Account: {self.number} ({self.currency}) {self.balance}")
+        print(f"💳 Account: {self.number} ({self.currency}) {self.balance}")
 
     def deposit(self, amount, notes):
         self.transactions.append(Transaction(amount, notes))
@@ -57,8 +64,11 @@ class Account:
 
     def print_transactions(self):
         self.status()
-        for transaction in self.transactions:
-            transaction.status()
+        if len(self.transactions) == 0:
+            print("💸 <no transactions for this account>")
+        else:
+            for transaction in self.transactions:
+                transaction.status()
 
 
 class Transaction:
@@ -68,7 +78,7 @@ class Transaction:
         self.datetime_created = datetime.datetime.now()
     
     def status(self):
-        print(f"Transaction:\t{self.amount}\t{self.datetime_created}\t{self.notes}")
+        print(f"💸 Transaction:\t{self.amount}\t{self.datetime_created}\t{self.notes}")
 
 
 
@@ -102,13 +112,13 @@ customer2.add_account("679458245", "USD", 0)
 customer2.accounts[0].deposit(600, "Alga par 03/2023")
 
 def transfer_money(account_from, account_to, amount):
-    account_from.withdraw(amount, f"Transfer to {account_to.number}")
-    account_to.deposit(amount, f"Transfer from {account_from.number}")
+    if account_from.balance < amount:
+        print(f"❌ Account {account_from.number} has insufficient balance!")
+    else:
+        account_from.withdraw(amount, f"Transfer to {account_to.number}")
+        account_to.deposit(amount, f"Transfer from {account_from.number}")
 
-transfer_money(customer2.accounts[0], customer1.accounts[0], 200)
+transfer_money(customer2.accounts[0], customer1.accounts[0], 1200)
 
-for account in customer1.accounts:
-    account.print_transactions()
-
-for account in customer2.accounts:
-    account.print_transactions()
+customer1.print_transactions()
+customer2.print_transactions()
